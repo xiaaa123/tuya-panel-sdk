@@ -11,12 +11,13 @@ import {
   ViewPropTypes,
   View,
   ViewStyle,
+  TextInputProps,
 } from 'react-native';
 import { Utils } from 'tuya-panel-kit';
 
 const { convertX: cx, convertY: cy } = Utils.RatioUtils;
 
-interface IPutProps {
+interface IPutProps extends TextInputProps {
   /*
    * 必须有一个唯一的name
    */
@@ -25,18 +26,6 @@ interface IPutProps {
    * 输入框样式
    */
   viewStyle?: StyleProp<ViewStyle>;
-  /*
-   * placeholder站位
-   */
-  placeholder?: string;
-  /*
-   * 改变placeholder颜色
-   */
-  changeColor?: boolean;
-  /*
-   * 是否可编辑
-   */
-  editable?: boolean;
   /*
    * 输入框样式
    */
@@ -65,21 +54,9 @@ interface IPutProps {
 
 const MyIpt: FC<IPutProps> = forwardRef(
   (
-    {
-      name,
-      placeholder,
-      changeColor = false,
-      iptStyle,
-      focusFuc,
-      changeText,
-      minVal = 0,
-      maxVal = 255,
-      editable = true,
-      viewStyle,
-    },
+    { name, iptStyle, focusFuc, changeText, minVal = 0, maxVal = 255, viewStyle, ...props },
     ref
   ) => {
-    const [fus, setFus] = useState<boolean>(false);
     const [value, setVal] = useState<string>('');
     const osg = useRef(null);
     useImperativeHandle(ref, () => ({
@@ -91,18 +68,21 @@ const MyIpt: FC<IPutProps> = forwardRef(
     }));
 
     const onF = () => {
-      setFus(true);
       focusFuc();
     };
 
     const onChangeText = (val: any) => {
-      const inputVal = parseInt(val, 10);
-      if (inputVal > maxVal || (val !== '' && inputVal < minVal)) {
+      setVal(val);
+      changeText(val);
+    };
+    const validate = () => {
+      const inputVal = parseInt(value, 10);
+      if (inputVal > maxVal || (value !== '' && inputVal < minVal)) {
         setVal('');
         return;
       }
-      setVal(inputVal === 0 ? '0' : val);
-      changeText(val);
+      setVal(inputVal === 0 ? '0' : value);
+      changeText(value);
     };
 
     return (
@@ -111,19 +91,16 @@ const MyIpt: FC<IPutProps> = forwardRef(
           ref={osg}
           key={`${name}`}
           style={[styles.inputIp, iptStyle]}
-          placeholderTextColor={changeColor ? 'rgba(103, 112, 123, 1)' : 'rgba(103, 112, 123, 0.5)'}
           underlineColorAndroid="transparent"
-          placeholder={fus ? '' : placeholder}
-          maxLength={3}
           multiline
           numberOfLines={1}
           keyboardType="numeric"
           onFocus={onF}
           clearTextOnFocus
           onChangeText={e => onChangeText(e)}
-          selectionColor="rgba(152, 165, 198, 1)"
+          onBlur={validate}
           value={value}
-          editable={editable}
+          {...props}
         />
       </View>
     );
@@ -131,12 +108,9 @@ const MyIpt: FC<IPutProps> = forwardRef(
 );
 
 MyIpt.propTypes = {
-  changeColor: PropTypes.bool,
-  editable: PropTypes.bool,
   focusFuc: PropTypes.func,
   changeText: PropTypes.func,
   name: PropTypes.string,
-  placeholder: PropTypes.string,
   minVal: PropTypes.number,
   maxVal: PropTypes.number,
   iptStyle: ViewPropTypes.style,
@@ -146,10 +120,7 @@ MyIpt.propTypes = {
 MyIpt.defaultProps = {
   focusFuc: () => {},
   changeText: () => {},
-  changeColor: false,
-  editable: true,
   name: '',
-  placeholder: '',
   minVal: 255,
   maxVal: 255,
   iptStyle: null,

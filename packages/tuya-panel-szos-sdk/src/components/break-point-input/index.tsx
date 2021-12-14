@@ -16,10 +16,6 @@ interface IPutProps {
    */
   name: string;
   /*
-   * 改变placeholder颜色
-   */
-  changeColor?: boolean;
-  /*
    * 输入框ref
    */
   ref?: any;
@@ -33,7 +29,7 @@ interface IPutProps {
   placeHolder?: string;
 }
 
-const MyInput: FC<IPutProps> = forwardRef(({ name, changeColor, focusFuc, placeHolder }, ref) => {
+const MyInput: FC<IPutProps> = forwardRef(({ name, focusFuc, placeHolder }, ref) => {
   const [ipAdd, setIpA] = useState<any[]>([]);
   const [ipAddRess, setIpAddRes] = useState<string>('');
   const refMap = useRef({ current: null });
@@ -92,7 +88,6 @@ const MyInput: FC<IPutProps> = forwardRef(({ name, changeColor, focusFuc, placeH
                   placeholder={ip}
                   focusFuc={focusFuc}
                   minVal={index === 0 && name === 'ip' ? 1 : 0}
-                  changeColor={changeColor}
                   changeText={(e: any) => changeText(index, e)}
                 />
                 {ipAdd.length - 1 !== index && (
@@ -110,7 +105,6 @@ const MyInput: FC<IPutProps> = forwardRef(({ name, changeColor, focusFuc, placeH
 
 MyInput.propTypes = {
   name: PropTypes.string,
-  changeColor: PropTypes.bool,
   // eslint-disable-next-line react/no-unused-prop-types
   ref: PropTypes.any,
   focusFuc: PropTypes.func,
@@ -119,7 +113,6 @@ MyInput.propTypes = {
 
 MyInput.defaultProps = {
   name: '',
-  changeColor: false,
   ref: { current: null },
   focusFuc: () => {},
   placeHolder: '192.168.2.2',
