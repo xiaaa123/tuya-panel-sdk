@@ -830,10 +830,58 @@ declare module '@tuya/tuya-panel-szos-sdk' {
     backgroundColor?: ColorValue;
   }
 
+  export interface DpCacheTextProps {
+    /**
+     * @language zh-CN
+     * @description 文字标题
+     * @defaultValue ''
+     */
+    /**
+     * @language en-US
+     * @description title
+     * @defaultValue ''
+     */
+    title: string;
+    /**
+     * @language zh-CN
+     * @description 是否显示icon
+     * @defaultValue false
+     */
+    /**
+     * @language en-US
+     * @description is show icon
+     * @defaultValue false
+     */
+    showIcon: boolean;
+    /**
+     * @language zh-CN
+     * @description 容器样式
+     * @defaultValue false
+     */
+    /**
+     * @language en-US
+     * @description container style
+     * @defaultValue false
+     */
+    style?: StyleProp<ViewStyle | TextStyle>;
+    /**
+     * @language zh-CN
+     * @description 文本颜色
+     * @defaultValue false
+     */
+    /**
+     * @language en-US
+     * @description text color
+     * @defaultValue false
+     */
+    textColor: string;
+  }
+
   export const SoundWave: React.ComponentClass<SoundWaveProps>;
   export const StreeringWheel: React.ComponentClass<StreeringWheelProps>;
   export const MultiSlider: React.ComponentClass<MultiSliderProps>;
   export const ImageAnimate: React.ComponentClass<IImageAnimateProps>;
   export const BoxShadow: React.ComponentClass<BoxShadowProps>;
   export const WhiteSpace: React.ComponentClass<WhiteSpaceProps>;
+  export const DpCacheText: React.ComponentClass<DpCacheTextProps>;
 }
